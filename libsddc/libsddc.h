@@ -109,6 +109,8 @@ int sddc_get_adc_random(sddc_t *t);
 
 int sddc_set_adc_random(sddc_t *t, int random);
 
+int sddc_set_adc_frequency(sddc_t *t, double adc_frequency);
+
 
 /* HF block functions */
 double sddc_get_hf_attenuation(sddc_t *t);
