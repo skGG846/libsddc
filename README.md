@@ -58,7 +58,7 @@ The `sddc` shared library is built from `libsddc/CMakeLists.txt` as the CMake ta
 
 - Visual Studio 2019 or 2022 with C++ tools
 - CMake 3.13 or newer
-- A Win32 build environment
+- An x64 build environment
 
 Notes:
 
@@ -72,14 +72,14 @@ From the repository root:
 ```powershell
 mkdir build
 cd build
-cmake .. -G "Visual Studio 17 2022" -A Win32
+cmake .. -G "Visual Studio 17 2022" -A x64
 cmake --build . --config Release --target sddc
 ```
 
 If you use Visual Studio 2019 instead:
 
 ```powershell
-cmake .. -G "Visual Studio 16 2019" -A Win32
+cmake .. -G "Visual Studio 16 2019" -A x64
 cmake --build . --config Release --target sddc
 ```
 
@@ -91,6 +91,8 @@ Typical output files:
 - `build\libsddc\Release\sddc.lib`
 
 Depending on the generator and configuration, the exact path can vary slightly, but the built DLL target name is `sddc.dll`.
+
+This repository is expected to be built as `x64`; on Windows the top-level CMake logic selects the 64-bit FFTW package when the generator platform is `x64`.
 
 ## Related Targets
 
