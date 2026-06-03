@@ -63,7 +63,7 @@ The `sddc` shared library is built from `libsddc/CMakeLists.txt` as the CMake ta
 Notes:
 
 - The top-level build downloads and prepares FFTW automatically on Windows through `ExternalProject_Add`.
-- `Core/CMakeLists.txt` embeds `SDDC_FX3.img` into the build, so that image file must exist at the repository root before configuring.
+- `Core/CMakeLists.txt` references `SDDC_FX3.img` during configuration, so that image file must exist at the repository root before configuring.
 
 ### Build Commands
 
@@ -89,10 +89,32 @@ Typical output files:
 
 - `build\libsddc\Release\sddc.dll`
 - `build\libsddc\Release\sddc.lib`
+- `build\LIBFFTW-prefix\src\LIBFFTW\libfftw3f-3.dll`
+- `build\LIBFFTW-prefix\src\LIBFFTW\fftw3f-3.lib`
 
 Depending on the generator and configuration, the exact path can vary slightly, but the built DLL target name is `sddc.dll`.
 
 This repository is expected to be built as `x64`; on Windows the top-level CMake logic selects the 64-bit FFTW package when the generator platform is `x64`.
+
+## Runtime Files Required To Use `sddc.dll`
+
+To use `sddc.dll` from an application, the following files are required:
+
+- `sddc.dll`
+- `libfftw3f-3.dll`
+- `SDDC_FX3.img`
+
+Typical locations after build:
+
+- `sddc.dll`: `build\libsddc\Release\sddc.dll`
+- `libfftw3f-3.dll`: `build\LIBFFTW-prefix\src\LIBFFTW\libfftw3f-3.dll`
+- `SDDC_FX3.img`: repository root, `SDDC_FX3.img`
+
+Placement notes:
+
+- `libfftw3f-3.dll` should be copied next to `sddc.dll`, or otherwise placed in a directory that Windows DLL search can resolve at runtime.
+- The current `sddc_open(int index, const char* imagefile)` implementation opens the firmware image from the file path passed in `imagefile`, so `SDDC_FX3.img` must remain available as a real file at that path when the caller opens the device.
+- If your application deploys `sddc.dll` to another directory, deploy `libfftw3f-3.dll` alongside it and either deploy `SDDC_FX3.img` alongside your application or pass an absolute path to the image file.
 
 ## Related Targets
 
